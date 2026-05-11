@@ -1101,13 +1101,24 @@ function closePopup(){
 }
 
 // Copy CA
-function copyCA(){
-  const ca=document.getElementById('caText').textContent;
-  navigator.clipboard.writeText(ca).catch(()=>{});
-  const btn=document.getElementById('caBtn');
-  btn.textContent='[ COPIED ]';
-  btn.classList.add('copied');
-  setTimeout(()=>{btn.textContent='[ COPY ]';btn.classList.remove('copied');},2000);
+function copyCA() {
+  const text = document.getElementById("caText").innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("caBtn");
+    btn.innerText = "[ COPIED ]";
+    setTimeout(() => btn.innerText = "[ COPY ]", 2000);
+  }).catch(() => {
+    // Fallback untuk browser lama
+    const el = document.createElement("textarea");
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    const btn = document.getElementById("caBtn");
+    btn.innerText = "[ COPIED ]";
+    setTimeout(() => btn.innerText = "[ COPY ]", 2000);
+  });
 }
 
 // Auto popup
